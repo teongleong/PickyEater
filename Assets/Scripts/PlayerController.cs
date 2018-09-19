@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-	public float leftLimit = -300f;
-	public float rightLimit = 300f;
+	public float leftLimit = -200f;
+	public float rightLimit = 200f;
 	public float speed = 5;
 	RectTransform rt;
 	// Use this for initialization

@@ -7,7 +7,7 @@ public class BarLengthManager : MonoBehaviour {
 
 	//float startY = 0;
 	//float startLength = 0;
-
+	public int maxLength = 1017;
 	
 	RectTransform rt;
 	// Use this for initialization
@@ -15,6 +15,14 @@ public class BarLengthManager : MonoBehaviour {
 		rt = GetComponent<RectTransform>();
 	//	startY = rt.anchoredPosition.y;
 	//	startLength = rt.rect.height;
+	}
+
+	public int GetLength() {
+		return (int) rt.rect.height;
+	}
+
+	public float GetPercent() {
+		return GetLength() / (float) maxLength;
 	}
 
 	public void ChangeLength(float delta) {

@@ -15,23 +15,27 @@ public class EatFood : MonoBehaviour {
 
 	float healthyCombo = 0;
 	float sinfulCombo = 0;
+	float score = 0;
+	int multiplier = 1;
+
+	int [] thresholds = new int [] { 3, 7, 11, 18, 25, 39};
 
 	public FoodSpawner foodSpawner;
 	public Text badComboText;
 	public Text goodComboText;
 
-	public Text scoreComboText;
+	public Text scoreText;
+	public Text gameOverText;
+	public Text multiplierText;
+
+	public Sprite eat;
 
 	void Start () {
 		UpdateBadScore(sinfulCombo);
 		UpdateGoodScore(healthyCombo);
+		UpdateMultiplierText(multiplier);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	foodType lastFoodType = foodType.none;
 
 	void OnTriggerEnter2D(Collider2D other)
@@ -48,6 +52,8 @@ public class EatFood : MonoBehaviour {
 			if (lastFoodType != foodType.healthy) {
 				sinfulCombo = 0;
 				UpdateBadScore(sinfulCombo);
+				multiplier = 1;
+				UpdateMultiplier();
 			}
 
 			lastFoodType = foodType.healthy;
@@ -66,19 +72,44 @@ public class EatFood : MonoBehaviour {
 				UpdateGoodScore(healthyCombo);
 			}
 
-			if (sinfulCombo > 0 && sinfulCombo % 5 == 0) {
-				foodSpawner.fallingSpeed *= 1.2f;
-			}
+			UpdateMultiplier();
 
 			lastFoodType = foodType.sinful;
 			UpdateBarLength(badFoodChange);
+			if (badBar.GetPercent() > 1) {
+				gameOverText.gameObject.SetActive(true);
+				Time.timeScale = 0;
+			}
 		}
 		Destroy(other.gameObject);
+	}
+
+	void UpdateMultiplier() {
+
+		int multiplierTemp = multiplier;
+
+		if (sinfulCombo > 0 ) {
+			for (int i = 0; i < thresholds.Length; i++)
+			{
+				if (sinfulCombo > thresholds[i]) {
+					multiplier = i + 1;
+					foodSpawner.repeatRate = foodSpawner.defaultRepeatRate / multiplier;
+					UpdateMultiplierText(multiplier);
+				}
+			}
+		} else {
+			UpdateMultiplierText(multiplier);
+		}
+
+		if (multiplierTemp != multiplier) {
+			foodSpawner.fallingSpeed *= 1.1f;
+		}
 	}
 
 	void UpdateBarLength(Vector2 delta) {
 		//goodBar.ChangeLength(delta.y);
 		badBar.ChangeLength(delta.x);
+		Debug.Log("bar bar " + badBar.GetPercent());
 	}
 
 	void UpdateScoreText(Text textObj, string label, float value) {
@@ -90,7 +121,30 @@ public class EatFood : MonoBehaviour {
 	}
 
 	void UpdateBadScore(float value) {
-		UpdateScoreText(badComboText, "bad combo:", value);
+		UpdateScoreText(badComboText, "Combo:", value);
+	}
+
+	void UpdateScore(int value) {
+		UpdateScoreText(scoreText, "Score: ", value);
+	}
+
+	void Reset() {
+		UpdateBadScore(sinfulCombo);
+		UpdateGoodScore(healthyCombo);
+		gameOverText.gameObject.SetActive(false);
+		Time.timeScale = 1;
+	}
+
+	void UpdateMultiplierText(int value) {
+		UpdateScoreText(multiplierText, "Multiplier:", value);
+		multiplierText.text += "X";
+	}
+
+	// Update is called once per frame
+	void Update () {
+		score += (Time.deltaTime * 10 * multiplier);
+		//score /= (float) 10;
+		UpdateScore((int) score);
 	}
 
 

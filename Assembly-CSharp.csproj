@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{DD419A72-10A9-E3CF-9C73-BB59A9798318}</ProjectGuid>
+    <ProjectGuid>{F0077BC3-B5C1-7F4D-8026-FB3AB4166084}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -53,24 +53,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BarLengthManager.cs" />
-     <Compile Include="Assets\EatFood.cs" />
-     <Compile Include="Assets\FoodFalling.cs" />
-     <Compile Include="Assets\FoodSpawner.cs" />
-     <Compile Include="Assets\MainGame.cs" />
-     <Compile Include="Assets\PlayerController.cs" />
-     <Compile Include="Assets\WasteFood.cs" />
+     <Compile Include="Assets\Scripts\BarLengthManager.cs" />
+     <Compile Include="Assets\Scripts\EatFood.cs" />
+     <Compile Include="Assets\Scripts\FoodFalling.cs" />
+     <Compile Include="Assets\Scripts\FoodSpawner.cs" />
+     <Compile Include="Assets\Scripts\MainGame.cs" />
+     <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\WasteFood.cs" />
  <Reference Include="UnityEditor.StandardEvents">
- <HintPath>C:/Code/PickyEater/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ <HintPath>C:/Code/PickyEaterGit/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>C:/Code/PickyEater/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>C:/Code/PickyEaterGit/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>C:/Code/PickyEater/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+ <HintPath>C:/Code/PickyEaterGit/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>C:/Code/PickyEater/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>C:/Code/PickyEaterGit/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity201828f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
