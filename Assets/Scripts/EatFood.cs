@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EatFood : MonoBehaviour {
 
 	//public BarLengthManager goodBar;
-	public BarLengthManager badBar;
+	//public BarLengthManager badBar;
 	public BarLengthManager2 angerBar;
 
 	public Vector2 goodFoodChange = new Vector2(10, 0);
@@ -18,26 +18,45 @@ public class EatFood : MonoBehaviour {
 	enum foodType { healthy, sinful, superFood, rottenFood, none };
 
 	float healthyCombo = 0;
-	float sinfulCombo = 0;
+	int sinfulCombo = 0;
 	float score = 0;
 	int multiplier = 1;
+
+	int highScore = 0;
+	int ComboHighScore = 0;
+
+	int bestCombo = 0;
 
 	int [] thresholds = new int [] { 5, 10, 15, 25, 40, 65, 105, 170, 275};
 
 	public FoodSpawner foodSpawner;
 	public MumFaceManager mumFaceManager;
 	public Text badComboText;
+	public Text bestComboText;
 	public Text goodComboText;
+	public Text multiplierFlashText;
 
 	public Text scoreText;
 	public Text gameOverText;
 	public Text multiplierText;
 
+	public Text highScoreText;
+
+	public Text comboHighScoreText;
+
 	public GameObject darkenBackground;
 
-	public	bool gameOver = true;
+	public FlashNSeconds multiplierFlash;
+
+	public bool gameOver = true;
+
+	float elapsedTimeSinceLastCandy = 0;
 
 	void Start () {
+
+		highScore = PlayerPrefs.GetInt("HighScore", 0);
+		ComboHighScore = PlayerPrefs.GetInt("ComboHighScore", 0);
+
 		UpdateBadScore(sinfulCombo);
 		UpdateGoodScore(healthyCombo);
 		UpdateMultiplierText(multiplier);
@@ -57,10 +76,17 @@ public class EatFood : MonoBehaviour {
 			}
 
 			if (lastFoodType != foodType.healthy) {
+				if (sinfulCombo > bestCombo) {
+					bestCombo = sinfulCombo;
+					UpdateBestCombo(bestCombo);
+				}
+				
 				sinfulCombo = 0;
 				UpdateBadScore(sinfulCombo);
 				multiplier = 1;
 				UpdateMultiplier();
+				multiplierFlash.ShowAndHide();
+				multiplierFlashText.text = "multiplier: " + multiplier + "X" ;
 			}
 
 			lastFoodType = foodType.healthy;
@@ -68,7 +94,7 @@ public class EatFood : MonoBehaviour {
 
 		} else if (other.gameObject.tag == "BadFood") {
 			//Debug.Log("YOLO");
-
+			elapsedTimeSinceLastCandy = 0;
 			if (lastFoodType == foodType.sinful) {
 				++sinfulCombo;
 				UpdateBadScore(sinfulCombo);
@@ -83,10 +109,6 @@ public class EatFood : MonoBehaviour {
 
 			lastFoodType = foodType.sinful;
 			UpdateBarLength(badFoodChangePercent);
-			if (badBar.GetPercent() > 1) {
-				gameOverText.gameObject.SetActive(true);
-				//Time.timeScale = 0;
-			}
 			if (angerBar.GetPercent() > 1) {
 				GameOver();
 			}
@@ -109,6 +131,7 @@ public class EatFood : MonoBehaviour {
 					multiplier = i + 1;
 					//foodSpawner.redFoodSpawnRate = foodSpawner.defaultSpawnRate / multiplier;
 					UpdateMultiplierText(multiplier);
+					
 				}
 			}
 		} else {
@@ -116,6 +139,8 @@ public class EatFood : MonoBehaviour {
 		}
 
 		if (multiplierTemp != multiplier) {
+			multiplierFlash.ShowAndHide();
+			multiplierFlashText.text = "multiplier: " + multiplier+"X";
 			foodSpawner.fallingSpeed *= 1.1f;
 		}
 	}
@@ -137,11 +162,23 @@ public class EatFood : MonoBehaviour {
 	}
 
 	void UpdateBadScore(float value) {
-		UpdateScoreText(badComboText, "Combo:", value);
+		UpdateScoreText(badComboText, "Combo:  ", value);
 	}
 
 	void UpdateScore(int value) {
 		UpdateScoreText(scoreText, "Score: ", value);
+	}
+
+	void UpdateBestCombo(int value) {
+		UpdateScoreText(bestComboText, "Best Combo: ", value);
+	}
+
+	void UpdateComboHighScore(int value) {
+		UpdateScoreText(comboHighScoreText, "Combo HighScore: ", value);
+	}
+
+	void UpdateHighScore(float value) {
+		UpdateScoreText(highScoreText, "HighScore: ", value);
 	}
 
 	void GameOver() {
@@ -153,6 +190,11 @@ public class EatFood : MonoBehaviour {
 		darkenBackground.SetActive(true);
 		foodSpawner.StopAllCoroutines();
 		UpdateMumIcon();
+		if (score > highScore) highScore = (int) score;
+		if (bestCombo > ComboHighScore) ComboHighScore = bestCombo;
+		if (sinfulCombo > ComboHighScore) ComboHighScore = sinfulCombo;
+		UpdateComboHighScore((int)Mathf.FloorToInt(ComboHighScore));
+		UpdateHighScore((int)Mathf.FloorToInt(highScore));
 	}
 
 	public void Reset() {
@@ -161,8 +203,10 @@ public class EatFood : MonoBehaviour {
 		score = 0;
 		multiplier = 1;
 		sinfulCombo = 0;
+		bestCombo = 0;
 		UpdateBadScore(sinfulCombo);
 		UpdateGoodScore(healthyCombo);
+		UpdateBestCombo(bestCombo);
 
 		UpdateMultiplierText(multiplier);
 		
@@ -184,6 +228,20 @@ public class EatFood : MonoBehaviour {
 	void Update () {
 		if (gameOver) return;
 
+		elapsedTimeSinceLastCandy += Time.deltaTime;
+
+		if (elapsedTimeSinceLastCandy > 5f) {
+			if (multiplier > 1) {
+				sinfulCombo = 0;
+				multiplier = 1;	
+				UpdateMultiplier();
+				multiplierFlash.ShowAndHide();
+				multiplierFlashText.text = "multiplier: " + multiplier+"X";
+				elapsedTimeSinceLastCandy = 0;
+			}
+		}
+		
+
 		score += (Time.deltaTime * 10 * multiplier);
 		//score /= (float) 10;
 		UpdateScore((int) score);
@@ -201,6 +259,16 @@ public class EatFood : MonoBehaviour {
 			mumFaceManager.SetAngerState(1);
 		else 
 			mumFaceManager.SetAngerState(0);
+	}
+
+	/// <summary>
+	/// This function is called when the MonoBehaviour will be destroyed.
+	/// </summary>
+	void OnDestroy()
+	{
+		PlayerPrefs.SetInt("HighScore", highScore);
+		PlayerPrefs.SetInt("ComboHighScore", ComboHighScore);
+
 	}
 
 
