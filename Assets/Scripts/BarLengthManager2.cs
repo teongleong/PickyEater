@@ -9,11 +9,17 @@ public class BarLengthManager2 : MonoBehaviour {
 	//float startLength = 0;
 	public int maxLength = 1017;
 	public float decayRate = 0.05f;
+
+	public EatFood eatFood;
 	
 	RectTransform rt;
 	// Use this for initialization
 	void Start () {
 		rt = GetComponent<RectTransform>();
+	}
+
+	public void Reset() {
+		rt.sizeDelta = new Vector2 (0, rt.rect.height);
 	}
 
 	public int GetLength() {
@@ -37,6 +43,7 @@ public class BarLengthManager2 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (eatFood.gameOver) return;
 		// anger decay
 		ChangeLengthPercent(-1 * Time.deltaTime * decayRate);
 	}

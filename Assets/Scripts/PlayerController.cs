@@ -12,9 +12,12 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		rt = GetComponent<RectTransform>();
 	}
+
+	public EatFood eatFood;
 	
 	// Update is called once per frame
 	void Update () {
+		if (eatFood.gameOver) return;
 		if (Input.GetKey(KeyCode.LeftArrow)) {
 			Vector2 currentPosition = rt.anchoredPosition;
 			float newX = currentPosition.x - speed;

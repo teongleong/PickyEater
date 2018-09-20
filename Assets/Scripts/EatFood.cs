@@ -13,6 +13,7 @@ public class EatFood : MonoBehaviour {
 	public Vector2 badFoodChange = new Vector2(0, 10);
 	
 	public float badFoodChangePercent = 1f / 20f;
+	public float goodFoodChangePercent = -1f / 40f;
 
 	enum foodType { healthy, sinful, superFood, rottenFood, none };
 
@@ -32,9 +33,9 @@ public class EatFood : MonoBehaviour {
 	public Text gameOverText;
 	public Text multiplierText;
 
-	public Sprite babyEat;
+	public GameObject darkenBackground;
 
-	public GameObject retryButton;
+	public	bool gameOver = true;
 
 	void Start () {
 		UpdateBadScore(sinfulCombo);
@@ -48,7 +49,7 @@ public class EatFood : MonoBehaviour {
 	{
 		
 		if (other.gameObject.tag == "GoodFood") {
-			Debug.Log("Yuck");
+			//Debug.Log("Yuck");
 
 			if (lastFoodType == foodType.healthy) {
 				++healthyCombo;
@@ -63,10 +64,10 @@ public class EatFood : MonoBehaviour {
 			}
 
 			lastFoodType = foodType.healthy;
-			//UpdateBarLength(goodFoodChange);
+			UpdateBarLength(goodFoodChangePercent);
 
 		} else if (other.gameObject.tag == "BadFood") {
-			Debug.Log("YOLO");
+			//Debug.Log("YOLO");
 
 			if (lastFoodType == foodType.sinful) {
 				++sinfulCombo;
@@ -84,11 +85,10 @@ public class EatFood : MonoBehaviour {
 			UpdateBarLength(badFoodChangePercent);
 			if (badBar.GetPercent() > 1) {
 				gameOverText.gameObject.SetActive(true);
-				Time.timeScale = 0;
+				//Time.timeScale = 0;
 			}
 			if (angerBar.GetPercent() > 1) {
-				gameOverText.gameObject.SetActive(true);
-				Time.timeScale = 0;
+				GameOver();
 			}
 		} 
 		Destroy(other.gameObject);
@@ -120,8 +120,8 @@ public class EatFood : MonoBehaviour {
 		//goodBar.ChangeLength(delta.y);
 		//badBar.ChangeLength(delta.x);
 		angerBar.ChangeLengthPercent(deltaPercent);
-		Debug.Log("bar " + angerBar.GetPercent());
-		Debug.Log("anger percent "+angerBar.GetPercent());
+		//Debug.Log("bar " + angerBar.GetPercent());
+		//Debug.Log("anger percent "+angerBar.GetPercent());
 	}
 
 	void UpdateScoreText(Text textObj, string label, float value) {
@@ -140,11 +140,35 @@ public class EatFood : MonoBehaviour {
 		UpdateScoreText(scoreText, "Score: ", value);
 	}
 
-	void Reset() {
+	void GameOver() {
+		gameOverText.gameObject.SetActive(true);
+		//Time.timeScale = 0;
+		Animator animator = gameOverText.gameObject.GetComponent<Animator>();
+		animator.enabled = true;
+		gameOver = true;
+		darkenBackground.SetActive(true);
+		foodSpawner.StopAllCoroutines();
+		UpdateMumIcon();
+	}
+
+	public void Reset() {
+		darkenBackground.SetActive(false);
+		foodSpawner.Reset();
+		score = 0;
+		multiplier = 1;
+		sinfulCombo = 0;
 		UpdateBadScore(sinfulCombo);
 		UpdateGoodScore(healthyCombo);
+
+		UpdateMultiplierText(multiplier);
+		
+		UpdateScore((int) score);
+		UpdateMumIcon();
+		angerBar.Reset();
 		gameOverText.gameObject.SetActive(false);
-		Time.timeScale = 1;
+		Animator animator = gameOverText.gameObject.GetComponent<Animator>();
+		animator.enabled = false;
+		gameOver = false;
 	}
 
 	void UpdateMultiplierText(int value) {
@@ -154,6 +178,8 @@ public class EatFood : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (gameOver) return;
+
 		score += (Time.deltaTime * 10 * multiplier);
 		//score /= (float) 10;
 		UpdateScore((int) score);
@@ -161,7 +187,9 @@ public class EatFood : MonoBehaviour {
 	}
 
 	void UpdateMumIcon() {
-		if (angerBar.GetPercent() > 0.8f)
+		if (angerBar.GetPercent() > 1f)
+			mumFaceManager.SetAngerState(4);
+		else if (angerBar.GetPercent() > 0.8f)
 			mumFaceManager.SetAngerState(3);
 		else if (angerBar.GetPercent() > 0.6f)
 			mumFaceManager.SetAngerState(2);
