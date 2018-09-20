@@ -119,7 +119,16 @@ public class FoodSpawner : MonoBehaviour {
 
 	void SpawnGood()
     {
-        GameObject newFood = Instantiate(GoodFoodPrefab, canvasTransform);
+		GameObject newFood = null;
+		float random = Random.value;
+        if (random > 0.85f) 
+        	newFood = Instantiate(SuperFoodPrefab, canvasTransform);
+		else if (random > 0.6f) 
+			newFood = Instantiate(RottenFoodPrefab, canvasTransform);
+		else 
+			newFood = Instantiate(GoodFoodPrefab, canvasTransform);
+
+        //GameObject newFood = Instantiate(GoodFoodPrefab, canvasTransform);
 		RectTransform rt = newFood.GetComponent<RectTransform>();
 		//rt.SetParent(canvasTransform);
 		Vector2 currPos = rt.anchoredPosition;

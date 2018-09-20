@@ -22,7 +22,7 @@ public class EatFood : MonoBehaviour {
 	float score = 0;
 	int multiplier = 1;
 
-	int [] thresholds = new int [] { 5, 10, 15, 25, 40, };
+	int [] thresholds = new int [] { 5, 10, 15, 25, 40, 65, 105, 170, 275};
 
 	public FoodSpawner foodSpawner;
 	public MumFaceManager mumFaceManager;
@@ -90,7 +90,11 @@ public class EatFood : MonoBehaviour {
 			if (angerBar.GetPercent() > 1) {
 				GameOver();
 			}
-		} 
+		} else if (other.gameObject.tag == "RottenFood") {
+			GameOver();
+		} else if (other.gameObject.tag == "SuperFood") {
+			UpdateBarLength(-1f);
+		}
 		Destroy(other.gameObject);
 	}
 
