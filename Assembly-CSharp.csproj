@@ -53,11 +53,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BabyFaceManager.cs" />
      <Compile Include="Assets\Scripts\BarLengthManager.cs" />
+     <Compile Include="Assets\Scripts\BarLengthManager2.cs" />
      <Compile Include="Assets\Scripts\EatFood.cs" />
      <Compile Include="Assets\Scripts\FoodFalling.cs" />
      <Compile Include="Assets\Scripts\FoodSpawner.cs" />
      <Compile Include="Assets\Scripts\MainGame.cs" />
+     <Compile Include="Assets\Scripts\MumFaceManager.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\WasteFood.cs" />
  <Reference Include="UnityEditor.StandardEvents">

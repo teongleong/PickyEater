@@ -7,20 +7,24 @@ public class EatFood : MonoBehaviour {
 
 	//public BarLengthManager goodBar;
 	public BarLengthManager badBar;
+	public BarLengthManager2 angerBar;
 
 	public Vector2 goodFoodChange = new Vector2(10, 0);
 	public Vector2 badFoodChange = new Vector2(0, 10);
 	
-	enum foodType { healthy, sinful, none };
+	public float badFoodChangePercent = 1f / 20f;
+
+	enum foodType { healthy, sinful, superFood, rottenFood, none };
 
 	float healthyCombo = 0;
 	float sinfulCombo = 0;
 	float score = 0;
 	int multiplier = 1;
 
-	int [] thresholds = new int [] { 3, 7, 11, 18, 25, 39};
+	int [] thresholds = new int [] { 5, 10, 15, 25, 40, };
 
 	public FoodSpawner foodSpawner;
+	public MumFaceManager mumFaceManager;
 	public Text badComboText;
 	public Text goodComboText;
 
@@ -28,7 +32,9 @@ public class EatFood : MonoBehaviour {
 	public Text gameOverText;
 	public Text multiplierText;
 
-	public Sprite eat;
+	public Sprite babyEat;
+
+	public GameObject retryButton;
 
 	void Start () {
 		UpdateBadScore(sinfulCombo);
@@ -57,7 +63,7 @@ public class EatFood : MonoBehaviour {
 			}
 
 			lastFoodType = foodType.healthy;
-			UpdateBarLength(goodFoodChange);
+			//UpdateBarLength(goodFoodChange);
 
 		} else if (other.gameObject.tag == "BadFood") {
 			Debug.Log("YOLO");
@@ -75,12 +81,16 @@ public class EatFood : MonoBehaviour {
 			UpdateMultiplier();
 
 			lastFoodType = foodType.sinful;
-			UpdateBarLength(badFoodChange);
+			UpdateBarLength(badFoodChangePercent);
 			if (badBar.GetPercent() > 1) {
 				gameOverText.gameObject.SetActive(true);
 				Time.timeScale = 0;
 			}
-		}
+			if (angerBar.GetPercent() > 1) {
+				gameOverText.gameObject.SetActive(true);
+				Time.timeScale = 0;
+			}
+		} 
 		Destroy(other.gameObject);
 	}
 
@@ -93,7 +103,7 @@ public class EatFood : MonoBehaviour {
 			{
 				if (sinfulCombo > thresholds[i]) {
 					multiplier = i + 1;
-					foodSpawner.repeatRate = foodSpawner.defaultRepeatRate / multiplier;
+					//foodSpawner.redFoodSpawnRate = foodSpawner.defaultSpawnRate / multiplier;
 					UpdateMultiplierText(multiplier);
 				}
 			}
@@ -106,10 +116,12 @@ public class EatFood : MonoBehaviour {
 		}
 	}
 
-	void UpdateBarLength(Vector2 delta) {
+	void UpdateBarLength(float deltaPercent) {
 		//goodBar.ChangeLength(delta.y);
-		badBar.ChangeLength(delta.x);
-		Debug.Log("bar bar " + badBar.GetPercent());
+		//badBar.ChangeLength(delta.x);
+		angerBar.ChangeLengthPercent(deltaPercent);
+		Debug.Log("bar " + angerBar.GetPercent());
+		Debug.Log("anger percent "+angerBar.GetPercent());
 	}
 
 	void UpdateScoreText(Text textObj, string label, float value) {
@@ -145,6 +157,18 @@ public class EatFood : MonoBehaviour {
 		score += (Time.deltaTime * 10 * multiplier);
 		//score /= (float) 10;
 		UpdateScore((int) score);
+		UpdateMumIcon();
+	}
+
+	void UpdateMumIcon() {
+		if (angerBar.GetPercent() > 0.8f)
+			mumFaceManager.SetAngerState(3);
+		else if (angerBar.GetPercent() > 0.6f)
+			mumFaceManager.SetAngerState(2);
+		else if (angerBar.GetPercent() > 0.35f)
+			mumFaceManager.SetAngerState(1);
+		else 
+			mumFaceManager.SetAngerState(0);
 	}
 
 
