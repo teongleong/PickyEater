@@ -52,10 +52,15 @@ public class EatFood : MonoBehaviour {
 
 	float elapsedTimeSinceLastCandy = 0;
 
+	public Animator babyAnimator;
+
 	void Start () {
 
 		highScore = PlayerPrefs.GetInt("HighScore", 0);
 		ComboHighScore = PlayerPrefs.GetInt("ComboHighScore", 0);
+
+		UpdateHighScore(highScore);
+		UpdateComboHighScore(ComboHighScore);
 
 		UpdateBadScore(sinfulCombo);
 		UpdateGoodScore(healthyCombo);
@@ -195,6 +200,9 @@ public class EatFood : MonoBehaviour {
 		if (sinfulCombo > ComboHighScore) ComboHighScore = sinfulCombo;
 		UpdateComboHighScore((int)Mathf.FloorToInt(ComboHighScore));
 		UpdateHighScore((int)Mathf.FloorToInt(highScore));
+		PlayerPrefs.SetInt("HighScore", highScore);
+		PlayerPrefs.SetInt("ComboHighScore", ComboHighScore);
+		babyAnimator.enabled = false;
 	}
 
 	public void Reset() {
@@ -216,7 +224,10 @@ public class EatFood : MonoBehaviour {
 		gameOverText.gameObject.SetActive(false);
 		Animator animator = gameOverText.gameObject.GetComponent<Animator>();
 		animator.enabled = false;
+
+		babyAnimator.enabled = true;
 		gameOver = false;
+
 	}
 
 	void UpdateMultiplierText(int value) {
@@ -268,8 +279,15 @@ public class EatFood : MonoBehaviour {
 	{
 		PlayerPrefs.SetInt("HighScore", highScore);
 		PlayerPrefs.SetInt("ComboHighScore", ComboHighScore);
-
 	}
 
+	public void ResetHighScores() {
+		highScore = 0;
+		ComboHighScore = 0;
+		UpdateHighScore(highScore);
+		UpdateComboHighScore(ComboHighScore);
+		PlayerPrefs.SetInt("HighScore", highScore);
+		PlayerPrefs.SetInt("ComboHighScore", ComboHighScore);
+	}
 
 }
