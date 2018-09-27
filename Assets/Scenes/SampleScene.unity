@@ -297,7 +297,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 40.34, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &213550514
@@ -339,7 +339,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1474896878}
+      - m_Target: {fileID: 0}
         m_MethodName: ResetHighScores
         m_Mode: 1
         m_Arguments:
@@ -2228,9 +2228,9 @@ GameObject:
   - component: {fileID: 1474896875}
   - component: {fileID: 1474896880}
   - component: {fileID: 1474896879}
-  - component: {fileID: 1474896878}
   - component: {fileID: 1474896881}
   - component: {fileID: 1474896882}
+  - component: {fileID: 1474896878}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2313,7 +2313,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1474896873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 042f37431fed5444daf44d018193fe5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 99a615c0964783c4b8027a4457c4179a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   angerBar: {fileID: 43373958}
@@ -2321,14 +2321,6 @@ MonoBehaviour:
   badFoodChange: {x: 25, y: 50}
   badFoodChangePercent: 0.05
   goodFoodChangePercent: -0.025
-  healthyCombo: 0
-  sinfulCombo: 0
-  score: 0
-  multiplier: 1
-  highScore: 0
-  ComboHighScore: 0
-  bestCombo: 0
-  thresholds: 050000000a0000000f00000019000000280000004100000069000000aa00000013010000
   foodSpawner: {fileID: 1974311728}
   mumFaceManager: {fileID: 1860907663}
   badComboText: {fileID: 1717524560}
@@ -2343,9 +2335,7 @@ MonoBehaviour:
   darkenBackground: {fileID: 389825398}
   multiplierFlash: {fileID: 1144568491}
   gameOver: 0
-  elapsedTimeSinceLastCandy: 0
   babyAnimator: {fileID: 1474896882}
-  lastFoodType: 4
 --- !u!50 &1474896879
 Rigidbody2D:
   serializedVersion: 4
@@ -3002,7 +2992,7 @@ GameObject:
   - component: {fileID: 1974311726}
   - component: {fileID: 1974311728}
   m_Layer: 0
-  m_Name: MainGame
+  m_Name: FoodSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
