@@ -7,9 +7,6 @@ public class Vibrating : MonoBehaviour {
 	public Vector2 targetPosition = Vector2.zero;
 	public Vector2 targetDeviation = Vector2.zero;
 
-	bool reached = false;
-	float speed = 1;
-
 	public Vector2 defaultPosition = Vector2.zero;
 
 	RectTransform rt;

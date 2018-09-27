@@ -35,10 +35,6 @@ public class FoodSpawner : MonoBehaviour {
 
 	public RectTransform playerTransform;
 
-	Coroutine badLoop;
-	Coroutine goodLoop;
-
-
 	// Use this for initialization
 	void Start () {
 		//InvokeRepeating("SpawnBad", 0f, 1.5f);
@@ -72,8 +68,8 @@ public class FoodSpawner : MonoBehaviour {
 
 		StopAllCoroutines();
 
-		badLoop = StartCoroutine(RepeatSpawnBad());
-		goodLoop = StartCoroutine(RepeatSpawnGood());
+		StartCoroutine(RepeatSpawnBad());
+		StartCoroutine(RepeatSpawnGood());
 	}
 	
 	// Update is called once per frame
