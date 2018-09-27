@@ -10,7 +10,7 @@ public class BarLengthManager2 : MonoBehaviour {
 	public int maxLength = 1017;
 	public float decayRate = 0.05f;
 
-	public EatFood eatFood;
+	public MainGame eatFood;
 	
 	RectTransform rt;
 	// Use this for initialization

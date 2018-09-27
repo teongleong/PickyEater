@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour {
 		rt = GetComponent<RectTransform>();
 	}
 
-	public EatFood eatFood;
+	public MainGame eatFood;
 	
 	// Update is called once per frame
 	void Update () {
