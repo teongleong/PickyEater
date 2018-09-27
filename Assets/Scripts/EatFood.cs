@@ -55,7 +55,6 @@ public class EatFood : MonoBehaviour {
 	public Animator babyAnimator;
 
 	void Start () {
-
 		highScore = PlayerPrefs.GetInt("HighScore", 0);
 		ComboHighScore = PlayerPrefs.GetInt("ComboHighScore", 0);
 
@@ -71,58 +70,61 @@ public class EatFood : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		
 		if (other.gameObject.tag == "GoodFood") {
-			//Debug.Log("Yuck");
-
-			if (lastFoodType == foodType.healthy) {
-				++healthyCombo;
-				UpdateGoodScore(healthyCombo);
-			}
-
-			if (lastFoodType != foodType.healthy) {
-				if (sinfulCombo > bestCombo) {
-					bestCombo = sinfulCombo;
-					UpdateBestCombo(bestCombo);
-				}
-				
-				sinfulCombo = 0;
-				UpdateBadScore(sinfulCombo);
-				multiplier = 1;
-				UpdateMultiplier();
-				multiplierFlash.ShowAndHide();
-				multiplierFlashText.text = "multiplier: " + multiplier + "X" ;
-			}
-
-			lastFoodType = foodType.healthy;
-			UpdateBarLength(goodFoodChangePercent);
-
+			GoodFoodUpdate();
 		} else if (other.gameObject.tag == "BadFood") {
-			//Debug.Log("YOLO");
-			elapsedTimeSinceLastCandy = 0;
-			if (lastFoodType == foodType.sinful) {
-				++sinfulCombo;
-				UpdateBadScore(sinfulCombo);
-			}
-
-			if (lastFoodType != foodType.sinful) {
-				healthyCombo = 0;
-				UpdateGoodScore(healthyCombo);
-			}
-
-			UpdateMultiplier();
-
-			lastFoodType = foodType.sinful;
-			UpdateBarLength(badFoodChangePercent);
-			if (angerBar.GetPercent() > 1) {
-				GameOver();
-			}
+			BadFoodUpdate();
 		} else if (other.gameObject.tag == "RottenFood") {
 			GameOver();
 		} else if (other.gameObject.tag == "SuperFood") {
 			UpdateBarLength(-1f);
 		}
 		Destroy(other.gameObject);
+	}
+
+	void GoodFoodUpdate() {
+		if (lastFoodType == foodType.healthy) {
+			++healthyCombo;
+			UpdateGoodScore(healthyCombo);
+		}
+
+		if (lastFoodType != foodType.healthy) {
+			if (sinfulCombo > bestCombo) {
+				bestCombo = sinfulCombo;
+				UpdateBestCombo(bestCombo);
+			}
+			
+			sinfulCombo = 0;
+			UpdateBadScore(sinfulCombo);
+			multiplier = 1;
+			UpdateMultiplier();
+			multiplierFlash.ShowAndHide();
+			multiplierFlashText.text = "multiplier: " + multiplier + "X" ;
+		}
+
+		lastFoodType = foodType.healthy;
+		UpdateBarLength(goodFoodChangePercent);
+	}
+
+	void BadFoodUpdate() {
+		elapsedTimeSinceLastCandy = 0;
+		if (lastFoodType == foodType.sinful) {
+			++sinfulCombo;
+			UpdateBadScore(sinfulCombo);
+		}
+
+		if (lastFoodType != foodType.sinful) {
+			healthyCombo = 0;
+			UpdateGoodScore(healthyCombo);
+		}
+
+		UpdateMultiplier();
+
+		lastFoodType = foodType.sinful;
+		UpdateBarLength(badFoodChangePercent);
+		if (angerBar.GetPercent() > 1) {
+			GameOver();
+		}
 	}
 
 	void UpdateMultiplier() {
@@ -227,7 +229,6 @@ public class EatFood : MonoBehaviour {
 
 		babyAnimator.enabled = true;
 		gameOver = false;
-
 	}
 
 	void UpdateMultiplierText(int value) {
