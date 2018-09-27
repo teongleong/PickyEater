@@ -2321,6 +2321,14 @@ MonoBehaviour:
   badFoodChange: {x: 25, y: 50}
   badFoodChangePercent: 0.05
   goodFoodChangePercent: -0.025
+  healthyCombo: 0
+  sinfulCombo: 0
+  score: 0
+  multiplier: 1
+  highScore: 0
+  ComboHighScore: 0
+  bestCombo: 0
+  thresholds: 050000000a0000000f00000019000000280000004100000069000000aa00000013010000
   foodSpawner: {fileID: 1974311728}
   mumFaceManager: {fileID: 1860907663}
   badComboText: {fileID: 1717524560}
@@ -2335,7 +2343,9 @@ MonoBehaviour:
   darkenBackground: {fileID: 389825398}
   multiplierFlash: {fileID: 1144568491}
   gameOver: 0
+  elapsedTimeSinceLastCandy: 0
   babyAnimator: {fileID: 1474896882}
+  lastFoodType: 4
 --- !u!50 &1474896879
 Rigidbody2D:
   serializedVersion: 4
@@ -2990,7 +3000,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1974311726}
-  - component: {fileID: 1974311727}
   - component: {fileID: 1974311728}
   m_Layer: 0
   m_Name: MainGame
@@ -3012,22 +3021,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1974311727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1974311725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99a615c0964783c4b8027a4457c4179a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  angerPoints: 0
-  funPoints: 0
-  goodFoodPoints: 1
-  badFoodPoints: -1
-  money: 0
 --- !u!114 &1974311728
 MonoBehaviour:
   m_ObjectHideFlags: 0
